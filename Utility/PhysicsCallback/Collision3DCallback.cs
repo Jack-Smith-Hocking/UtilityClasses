@@ -6,7 +6,7 @@ namespace Custom.Utility
     /// Since Triggers and Collisions have no callback functionality (to my knowledge) i made a simple class to do just that
     /// Has a set of UnityEvents with no arguments and Actions that take the appropriate arguments 
     /// </summary>
-    public class CollisionCallback : Callback<Collision>
+    public class Collision3DCallback : Callback<Collision>
     {
         public void OnCollisionEnter(Collision collision)
         {

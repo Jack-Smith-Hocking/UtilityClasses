@@ -2,7 +2,7 @@
 
 namespace Custom.Utility
 {
-    public class TriggerCallback : Callback<Collider>
+    public class Trigger3DCallback : Callback<Collider>
     {
         public void OnTriggerEnter(Collider other)
         {

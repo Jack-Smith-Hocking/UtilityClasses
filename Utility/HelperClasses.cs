@@ -1141,7 +1141,7 @@ namespace Custom.Utility
         /// <typeparam name="T">The type of MonoBehaviour to get</typeparam>
         /// <param name="obj">The GameObject to get the MonoBehaviours from</param>
         /// <returns>A list of found MonoBehaviours</returns>
-        public static List<T> GetComponents<T>(GameObject obj) 
+        public static List<T> GetComponents<T>(GameObject obj)
         {
             if (!GeneralUtil.IsValid(obj)) return new List<T>(0);
 
@@ -1181,6 +1181,50 @@ namespace Custom.Utility
     #region GeneralPurposeOperations
     public static class GeneralUtil
     {
+        #region IEnumerators
+        /// <summary>
+        /// A coroutine to delay an action some amount of time, takes into account timeScale
+        /// </summary>
+        /// <param name="action">Action to perform after delay</param>
+        /// <param name="delay">Delay before performing action</param>
+        /// <returns></returns>
+        public static IEnumerator DelayAction(System.Action action, float delay)
+        {
+            if (action == null) yield return null;
+
+            yield return new WaitForSeconds(delay);
+
+            action?.Invoke();
+        }
+        /// <summary>
+        /// A coroutine to delay an action some amount of time, does not take into account timeScale
+        /// </summary>
+        /// <param name="action">Action to perform after delay</param>
+        /// <param name="delay">Delay before performing action</param>
+        /// <returns></returns>
+        public static IEnumerator DelayActionRealtime(System.Action action, float delay)
+        {
+            if (action == null) yield return null;
+
+            yield return new WaitForSecondsRealtime(delay);
+
+            action?.Invoke();
+        }
+        /// <summary>
+        /// Waits till the end of the frame before performing an action
+        /// </summary>
+        /// <param name="action">Action to perform at end of the frame</param>
+        /// <returns></returns>
+        public static IEnumerator DelayActionEOF(System.Action action)
+        {
+            if (action == null) yield return null;
+
+            yield return new WaitForEndOfFrame();
+
+            action?.Invoke();
+        }
+        #endregion
+
         /// <summary>
         /// Check if two objects are equal using the .Equals function
         /// </summary>
@@ -1229,11 +1273,18 @@ namespace Custom.Utility
                 }
             }
         }
-        public static void SafeDoWhile(Action action, Func<bool> predicate)
+        /// <summary>
+        /// A 'safe' do while loop, will loop until it hits the "maxIterations" where it will 
+        /// Decide that it has looped too many times and break out
+        /// </summary>
+        /// <param name="action">Action to perform in the loop</param>
+        /// <param name="predicate">Predicate to break out of the while loop</param>
+        /// <param name="maxIterations">The max number of iterations before breaking out</param>
+        public static void SafeDoWhile(Action action, Func<bool> predicate, uint maxIterations = 1000, bool logSafetyBreaks = true)
         {
             action?.Invoke();
 
-            SafeWhile(action, predicate);
+            SafeWhile(action, predicate, maxIterations, logSafetyBreaks);
         }
 
         /// <summary>
